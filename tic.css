@@ -32,6 +32,7 @@ p#scorename{
 }
 
 .gameboard tr td:hover{
+	border: 7px solid #333;
 	background-color: pink;
 }
 .gameboard  tr:first-child td{
@@ -58,6 +59,21 @@ p#scorename{
 }
 .scoreboard tr td {
 	text-align: center;
+}
+.endgame{
+	display: none;
+	width: 400px;
+	top: 120px;
+	background-color: rgba(205,133,63,0.8);
+	position:absolute;
+	left: 50%;
+	margin-left: -200px;
+	padding-top: 50px;
+	padding-bottom: 50px;
+	text-align: center;
+	border-radius: 5px;
+	font-size: 2em;
+	color: white;
 }
 footer{
 	left:15px;

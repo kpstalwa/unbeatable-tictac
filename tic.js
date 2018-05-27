@@ -52,13 +52,14 @@ const gameBoard = (() => {
     //write the message
     let mes = document.querySelector('.endgame .text');
     if(curWinner == humanPlay){
-      mes.textContent = "Hey, you won!";
+      mes.innerHTML = "Hey, you won! <br/>";
     }
     else if(curWinner == aiPlay){
-      mes.textContent = "The AI wins, a black day for humankind";
+     mes.innerHTML = "Oh no, the AI won! <br/>";
     }
     else{
-    mes.textContent = message;
+    console.log("reached here");
+    mes.innerHTML = message;
   }
 }
 
@@ -104,8 +105,6 @@ const gameBoard = (() => {
   function checkWin(){
     let aiCheck=0;
     let playCheck=0;
-    console.log(viCond.length);
-    console.log(viCond[0].length);
     for(let i=0; i<viCond.length; i++) {
       for(let j=0; j<viCond[i].length; j++){  
           //do comparison
@@ -151,10 +150,14 @@ const gameBoard = (() => {
       //after adding a point check for victory conditions
       //if(checkWin()){
         if(checkWin()){
-          //alert("won");
+          alert(curWinner);
           highlightWinCombo();
           announceOutcome("The winner is " + curWinner);
           updateScoreBoard(curWinner);
+          return;
+        }
+        else if(findFirstEmptySpot() === -1){
+          checkTie();
         }
       }
     }
@@ -168,7 +171,7 @@ const gameBoard = (() => {
       //except for first iteration
       fillSlot(slotId, humanPlay);
       //winning before a tie
-      if(!curWinner){
+     if(!curWinner){
         fillSlot(nextBestSpot(), aiPlay);
       }
     //}
@@ -229,6 +232,8 @@ return {startGame};
 
 gameBoard.startGame();
 let newBut = document.body.querySelector("#newgamebutton");
+let contBut = document.body.querySelector('#continuebutton');
+contBut.addEventListener('click', gameBoard.startGame, false);
 newBut.addEventListener('click', gameBoard.startGame, false);
 
 

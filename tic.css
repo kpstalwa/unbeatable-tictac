@@ -31,6 +31,11 @@ p#scorename{
 	top: 15%;
 }
 
+.gameboard td{
+	font-size: 30px;
+	font-family: 'Bowlby One SC';
+}
+
 .gameboard tr td:hover{
 	border: 7px solid #333;
 	background-color: pink;
@@ -53,19 +58,22 @@ p#scorename{
 	height: 100px;
 	width: 100px;
 	border: 2px solid #333;
+	font-size: 35px;
 }
+
 .scoreboard tr th {
 	text-align: center;
 }
 .scoreboard tr td {
 	text-align: center;
+
 }
 .endgame{
 	display: none;
 	width: 400px;
 	top: 120px;
-	background-color: rgba(205,133,63,0.8);
-	position:absolute;
+	background-color: rgba(170, 149, 191, 0.8);
+	position: absolute;
 	left: 50%;
 	margin-left: -200px;
 	padding-top: 50px;
@@ -75,6 +83,11 @@ p#scorename{
 	font-size: 2em;
 	color: white;
 }
+
+.endgame .text{
+	font-family: 'Merriweather', serif;
+}
+
 footer{
 	left:15px;
 	bottom:0;

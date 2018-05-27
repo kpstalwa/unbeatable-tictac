@@ -4,8 +4,9 @@
 	<title>Tic Tac Toe</title>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="tic.css">
-	<link href="https://fonts.googleapis.com/css?family=Pangolin" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
 	  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -23,7 +24,9 @@
 			<td id="aiscore">0</td>
 		</tr>
 	</table>
-	<button class="btn-primary" id="newgamebutton">Reset Game</button>
+	<div class = "buttonclass">
+	<button class="btn btn-primary" id="newgamebutton">Clear Board</button>
+</div>
 </div>
 
 
@@ -47,10 +50,13 @@
 
 <div class="endgame">
 <div class="text"></div>
+<div>
+	<button class="btn-primary" id="continuebutton">Continue</button>
+</div>
 	</div>
 
 <footer>
-	<p class="lead"> Tic Tac Toe has never been more intense. Now featuring an unbeatable AI</p>
+	<p class="lead"> Classic Tic Tac, now featuring an unbeatable AI.</p>
 </footer>
 </body>
 <script src="tic.js"></script>

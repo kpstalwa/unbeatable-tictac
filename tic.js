@@ -102,13 +102,13 @@ function checkTie(){
     }
   }
 
-  function checkWin(){
+  function checkWin(board){
     let aiCheck=0;
     let playCheck=0;
     for(let i=0; i<viCond.length; i++) {
       for(let j=0; j<viCond[i].length; j++){  
           //do comparison
-          if(curBoard[viCond[i][j]] === humanPlay){
+          if(board[viCond[i][j]] === humanPlay){
 
             playCheck++;
             if(playCheck===3){
@@ -119,7 +119,7 @@ function checkTie(){
         }
             //console.log(playCheck);
           }
-          else if(curBoard[viCond[i][j]] === aiPlay){
+          else if(board[viCond[i][j]] === aiPlay){
             aiCheck++;
             if (aiCheck===3){
           //ai has won
@@ -149,7 +149,7 @@ function checkTie(){
       curBoard[tmp] = player;
       //after adding a point check for victory conditions
       //if(checkWin()){
-        if(checkWin()){
+        if(checkWin(curBoard)){
         //  alert(curWinner);
         highlightWinCombo();
         announceOutcome("The winner is " + curWinner);
@@ -191,6 +191,7 @@ function findFirstEmptySpot(){
 //returns the id of the td
 function nextBestSpot(){
   //returns a move
+
   return minimax(curBoard, aiPlay).index;
 }
 
@@ -213,25 +214,24 @@ function minimax(board, currentPlayer){
  //first check terminal states and assign results
 let emptySpots = findAllEmptySpots();
 
- if(checkWin()){
+ if(checkWin(board)){
   if (curWinner === aiPlay){
-    console.log("Reached Terminal State: AI win");
+   // console.log("Reached Terminal State: AI win");
     resetStateOfWin();
     return {score: 10};
   }
   else if(curWinner === humanPlay){
     //human won
-    console.log("Reached Terminal State: Player win");
+   // console.log("Reached Terminal State: Player win");
     resetStateOfWin();
     return {score: -10};
   }
-  else if (emptySpots.length === 0){
-    console.log("Tie Game");
-    resetStateOfWin();
+}
+else if (emptySpots.length === 0){
+  //  console.log("Tie Game");
     return {score: 0};
   }
-}
-console.log("All empty spots are:" + emptySpots);
+//console.log("All empty spots are:" + emptySpots);
 
 
 let moves = []; //a list of all possible moves available to current player
@@ -246,16 +246,16 @@ for (var i = 0; i < emptySpots.length; i++) {
   if(currentPlayer === humanPlay){
     //change to ai's turn to go through this choice
 
-    console.log("Placed move human move at " + emptySpots[i]);
+    //console.log("Placed move human move at " + emptySpots[i]);
     var tmpobj = minimax(board, aiPlay);
-    console.log(tmpobj);
+    //console.log(tmpobj);
 
     move.score = tmpobj.score;
   }
   else{
-   console.log("Placed move AI move at " + emptySpots[i]);
+  // console.log("Placed move AI move at " + emptySpots[i]);
    var tmpobj1 = minimax(board, humanPlay);
-   console.log(tmpobj1);
+  // console.log(tmpobj1);
    move.score = tmpobj1.score;
  }
 
@@ -263,30 +263,30 @@ for (var i = 0; i < emptySpots.length; i++) {
   board[emptySpots[i]] =  storeBoardTmp;
   //store this move as a possible choice
   moves.push(move);
-  console.log("All possible moves at this lvl evaluated are " + moves);
+  //console.log("All possible moves at this lvl evaluated are " + moves);
 }
-  let bestInd;
+  var bestInd;
   if (currentPlayer == aiPlay){
     //maximize score
     var highSoFar = -1000;
-    for (var i = 0; i < moves.length; i++) {
-     if(moves[i].score > highSoFar){
-      highSoFar = moves[i].score;
-      bestInd = i;
+    for (var p = 0; p < moves.length; p++) {
+     if(moves[p].score > highSoFar){
+      highSoFar = moves[p].score;
+      bestInd = p;
     }
   }
-  return moves[bestInd]; 
+  
 }
 else {
   var lowSoFar = 1000;
-  for (var i = 0; i < moves.length; i++) {
-   if(moves[i].score < lowSoFar){
-    lowSoFar = moves[i].score;
-    bestInd = i;
+  for (var ii = 0; ii < moves.length; ii++) {
+   if(moves[ii].score < lowSoFar){
+    lowSoFar = moves[ii].score;
+    bestInd = ii;
   }
 }
-return moves[bestInd]; 
 }
+return moves[bestInd]; 
 }
 function clearBoard(){
   for (var i = cells.length - 1; i >= 0; i--) {
@@ -325,6 +325,8 @@ function startGame() {
   curWinner = null;
 }
 return {startGame};
+
+
 
 })();
 

@@ -17,7 +17,7 @@ const gameBoard = (() => {
   let humanPlay = 'X'; //for now player is always X
   let aiPlay = 'O';
   let curPlayer = aiPlay; 
-   let playedFirst = aiPlay;
+  let playedFirst = aiPlay;
   let cells = document.querySelectorAll('.cell');
   //score and switching x and y
 
@@ -56,16 +56,16 @@ const gameBoard = (() => {
     }
     else if(curWinner == aiPlay){
      mes.innerHTML = "Oh no, the AI won! <br/>";
-    }
-    else{
+   }
+   else{
     console.log("reached here");
     mes.innerHTML = message;
   }
 }
 
-  function checkTie(){
-    for (var i = curBoard.length - 1; i >= 0; i--) {
-      if(curBoard[i] === 'f'){
+function checkTie(){
+  for (var i = curBoard.length - 1; i >= 0; i--) {
+    if(curBoard[i] === 'f'){
         //there is a space to put things
         return false;
       }
@@ -150,33 +150,35 @@ const gameBoard = (() => {
       //after adding a point check for victory conditions
       //if(checkWin()){
         if(checkWin()){
-          alert(curWinner);
-          highlightWinCombo();
-          announceOutcome("The winner is " + curWinner);
-          updateScoreBoard(curWinner);
-          return;
-        }
-        else if(findFirstEmptySpot() === -1){
-          checkTie();
-        }
+        //  alert(curWinner);
+        highlightWinCombo();
+        announceOutcome("The winner is " + curWinner);
+        updateScoreBoard(curWinner);
+        return;
+      }
+      else if(findFirstEmptySpot() === -1){
+        checkTie();
       }
     }
+  }
 
-    function makeMark(slot){
-     let slotId=  slot.target.id;
-     if(curBoard[slotId] ==='f'){
+  function makeMark(slot){
+   let slotId=  slot.target.id;
+   if(curBoard[slotId] ==='f'){
 
       //if(curPlayer === humanPlay){
       //curPlayer will always be human because the AI waits on human
       //except for first iteration
       fillSlot(slotId, humanPlay);
       //winning before a tie
-     if(!curWinner){
+      if(!curWinner){
         fillSlot(nextBestSpot(), aiPlay);
       }
     //}
   }
 }
+
+//simple AI algorithm
 function findFirstEmptySpot(){
   for(let i=0; i<curBoard.length; i++){
     if(curBoard[i] == 'f'){
@@ -185,15 +187,112 @@ function findFirstEmptySpot(){
   }
   return -1;
 }
+
 //returns the id of the td
 function nextBestSpot(){
-  return findFirstEmptySpot();
+  //returns a move
+  return minimax(curBoard, aiPlay).index;
+}
+
+function resetStateOfWin(){
+  curWinner = null;
+  winningIndex = null;
+}
+function findAllEmptySpots(){
+  let arr = [];
+  for (var i = 0; i < curBoard.length; i++) {
+    if(curBoard[i] === 'f'){
+      arr.push(i);
+    }
+  }
+  return arr;
+}
+
+
+function minimax(board, currentPlayer){
+ //first check terminal states and assign results
+let emptySpots = findAllEmptySpots();
+
+ if(checkWin()){
+  if (curWinner === aiPlay){
+    console.log("Reached Terminal State: AI win");
+    resetStateOfWin();
+    return {score: 10};
+  }
+  else if(curWinner === humanPlay){
+    //human won
+    console.log("Reached Terminal State: Player win");
+    resetStateOfWin();
+    return {score: -10};
+  }
+  else if (emptySpots.length === 0){
+    console.log("Tie Game");
+    resetStateOfWin();
+    return {score: 0};
+  }
+}
+console.log("All empty spots are:" + emptySpots);
+
+
+let moves = []; //a list of all possible moves available to current player
+for (var i = 0; i < emptySpots.length; i++) {
+  var move = {}; //empty object to store score and index
+  move.index = emptySpots[i];
+
+  let storeBoardTmp = board[emptySpots[i]];
+  //place your move
+  board[emptySpots[i]] = currentPlayer;
+
+  if(currentPlayer === humanPlay){
+    //change to ai's turn to go through this choice
+
+    console.log("Placed move human move at " + emptySpots[i]);
+    var tmpobj = minimax(board, aiPlay);
+    console.log(tmpobj);
+
+    move.score = tmpobj.score;
+  }
+  else{
+   console.log("Placed move AI move at " + emptySpots[i]);
+   var tmpobj1 = minimax(board, humanPlay);
+   console.log(tmpobj1);
+   move.score = tmpobj1.score;
+ }
+
+  //change back board
+  board[emptySpots[i]] =  storeBoardTmp;
+  //store this move as a possible choice
+  moves.push(move);
+  console.log("All possible moves at this lvl evaluated are " + moves);
+}
+  let bestInd;
+  if (currentPlayer == aiPlay){
+    //maximize score
+    var highSoFar = -1000;
+    for (var i = 0; i < moves.length; i++) {
+     if(moves[i].score > highSoFar){
+      highSoFar = moves[i].score;
+      bestInd = i;
+    }
+  }
+  return moves[bestInd]; 
+}
+else {
+  var lowSoFar = 1000;
+  for (var i = 0; i < moves.length; i++) {
+   if(moves[i].score < lowSoFar){
+    lowSoFar = moves[i].score;
+    bestInd = i;
+  }
+}
+return moves[bestInd]; 
+}
 }
 function clearBoard(){
   for (var i = cells.length - 1; i >= 0; i--) {
     cells[i].textContent = '';
-  let divm = document.querySelector('.endgame');
-  divm.style.display = 'none';
+    let divm = document.querySelector('.endgame');
+    divm.style.display = 'none';
     cells[i].style.removeProperty('background-color');
     cells[i].addEventListener('click', makeMark, false);
   }
@@ -228,7 +327,6 @@ function startGame() {
 return {startGame};
 
 })();
-
 
 gameBoard.startGame();
 let newBut = document.body.querySelector("#newgamebutton");

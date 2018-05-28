@@ -18,6 +18,7 @@ const gameBoard = (() => {
   let aiPlay = 'O';
   let curPlayer = aiPlay; 
   let playedFirst = aiPlay;
+  let curDiff = 'hard';//or'easy'
   let cells = document.querySelectorAll('.cell');
   //score and switching x and y
 
@@ -191,8 +192,12 @@ function findFirstEmptySpot(){
 //returns the id of the td
 function nextBestSpot(){
   //returns a move
-
+  if(curDiff === 'easy'){
+    return findFirstEmptySpot();
+  }
+  else{
   return minimax(curBoard, aiPlay).index;
+}
 }
 
 function resetStateOfWin(){
@@ -324,7 +329,21 @@ function startGame() {
   winningIndex = null;
   curWinner = null;
 }
-return {startGame};
+
+function setDifficulty(){
+  if(curDiff === 'easy'){
+    curDiff = 'hard';
+    alert("You are now in Hard Mode, It's now impossible to win >:D")
+  }
+  else{
+    curDiff = 'easy';
+    alert("You are now in easy mode, the AI will make dumb moves ~:O");
+  }
+
+//  startGame();
+}
+
+return {startGame, setDifficulty};
 
 
 
@@ -333,7 +352,9 @@ return {startGame};
 gameBoard.startGame();
 let newBut = document.body.querySelector("#newgamebutton");
 let contBut = document.body.querySelector('#continuebutton');
+let diffBut = document.body.querySelector('#changediffbutton');
 contBut.addEventListener('click', gameBoard.startGame, false);
 newBut.addEventListener('click', gameBoard.startGame, false);
+diffBut.addEventListener('click', gameBoard.setDifficulty, false);
 
 
